@@ -77,7 +77,7 @@ async function scanFiles(uris: vscode.Uri[], sourceLabel: string): Promise<void>
     try { mtime = (await vscode.workspace.fs.stat(uri)).mtime; } catch { /* keep now */ }
     const { records, cases } = await ingestText(text, uri.fsPath, mtime);
     if (cases > 0) { totalCases += cases; }
-    totalRecords += await store.addRecords(records);
+    await store.addRecords(records);
   }
   vscode.window.showInformationMessage(`FlakyTest Hunter: imported ${totalCases} test case(s) from ${uris.length} report file(s) (${sourceLabel}).`);
   await refreshUI();
