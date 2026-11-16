@@ -2,30 +2,50 @@ import * as vscode from "vscode";
 import { FlakyTest } from "./types";
 import { sortBySeverity } from "./flakiness";
 
-export class FlakyTreeProvider implements vscode.TreeDataProvider<FlakyTest> {
-  private emitter = new vscode.EventEmitter<FlakyTest | undefined>();
+export class FlakyTreeProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
+  private emitter = new vscode.EventEmitter<vscode.TreeItem | undefined>();
   readonly onDidChangeTreeData = this.emitter.event;
   private tests: FlakyTest[] = [];
 
   refresh(tests: FlakyTest[]): void { this.tests = tests; this.emitter.fire(undefined); }
 
-  getChildren(element?: FlakyTest): vscode.ProviderResult<FlakyTest[] | vscode.TreeItem[]> {
-    if (!element) return sortBySeverity(this.tests);
-    return element.causes.map(c => {
-      const it = new vscode.TreeItem(`${c.cause} — ${c.confidence}%`, vscode.TreeItemCollapsibleState.None);
-      it.description = c.evidence.join(", ").slice(0, 80);
-      it.tooltip = c.suggestion;
-      return it;
-    });
+  getChildren(element?: vscode.TreeItem): vscode.ProviderResult<vscode.TreeItem[]> {
+    if (!element) {
+      return sortBySeverity(this.tests).map(t => this.getTreeItem(t));
+    }
+    
+    // إذا كان العنصر هو FlakyTest (أو TreeItem رئيسي)، نعيد الأسباب الفرعية كـ TreeItem
+    if (element instanceof FlakyTestItem) {
+      return element.causes.map(c => {
+        const it = new vscode.TreeItem(`${c.cause} — ${c.confidence}%`, vscode.TreeItemCollapsibleState.None);
+        it.description = c.evidence.join(", ").slice(0, 80);
+        it.tooltip = c.suggestion;
+        return it;
+      });
+    }
+    
+    return [];
   }
 
   getTreeItem(t: FlakyTest): vscode.TreeItem {
-    const icon = t.score >= 60 ? "$(flame)" : t.score >= 40 ? "$(warning)" : "$(debug-step-over)";
-    const item = new vscode.TreeItem(`${icon} ${t.name}`, vscode.TreeItemCollapsibleState.Collapsed);
-    item.description = `${t.score}/100 · ${t.causes[0].cause}`;
-    item.tooltip = `${t.classname} :: ${t.name}\n${t.runs} runs, ${t.fails} fails, ${t.passRate}% pass\nTop cause: ${t.causes[0].cause} (${t.causes[0].confidence}%)\n\n${t.causes[0].suggestion}`;
-    item.contextValue = "flakyTest";
-    return item;
+    return new FlakyTestItem(t);
+  }
+}
+
+// كلاس مساعد يمثل عنصر الاختبار في الشجرة ليتوافق تماماً مع TreeItem
+class FlakyTestItem extends vscode.TreeItem {
+  constructor(public readonly flakyTest: FlakyTest) {
+    super(
+      `${flakyTest.score >= 60 ? "$(flame)" : flakyTest.score >= 40 ? "$(warning)" : "$(debug-step-over)"} ${flakyTest.name}`,
+      vscode.TreeItemCollapsibleState.Collapsed
+    );
+    this.description = `${flakyTest.score}/100 · ${flakyTest.causes[0].cause}`;
+    this.tooltip = `${flakyTest.classname} :: ${flakyTest.name}\n${flakyTest.runs} runs, ${flakyTest.fails} fails, ${flakyTest.passRate}% pass\nTop cause: ${flakyTest.causes[0].cause} (${flakyTest.causes[0].confidence}%)\n\n${flakyTest.causes[0].suggestion}`;
+    this.contextValue = "flakyTest";
+  }
+
+  get causes() {
+    return this.flakyTest.causes;
   }
 }
 
