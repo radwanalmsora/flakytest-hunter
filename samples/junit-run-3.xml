@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ci" tests="5" failures="2" time="12.4">
+  <testcase classname="api" name="GET /users returns 200" time="0.45"/>
+  <testcase classname="api" name="POST /users persists" time="1.31"><failure message="connect ECONNREFUSED 127.0.0.1:5432">connect ECONNREFUSED 127.0.0.1:5432</failure></testcase>
+  <testcase classname="db" name="unique email constraint holds" time="0.58"/>
+  <testcase classname="ui" name="dashboard renders chart" time="7.77"><failure message="Timeout 10000ms exceeded waiting for selector .chart">Timeout 10000ms exceeded waiting for selector .chart</failure></testcase>
+  <testcase classname="util" name="slugify lowercases" time="0.01"/>
+</testsuite>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ci" tests="5" failures="2" time="12.4">
+  <testcase classname="api" name="GET /users returns 200" time="8.91"><failure message="Error: timeout of 5000ms exceeded at ClientRequest">Error: timeout of 5000ms exceeded at ClientRequest</failure></testcase>
+  <testcase classname="api" name="POST /users persists" time="1.23"/>
+  <testcase classname="db" name="unique email constraint holds" time="0.6"><failure message="Error: duplicate key value violates unique constraint users_email_key">Error: duplicate key value violates unique constraint users_email_key</failure></testcase>
+  <testcase classname="ui" name="dashboard renders chart" time="0.88"/>
+  <testcase classname="util" name="slugify lowercases" time="0.01"/>
+</testsuite>
