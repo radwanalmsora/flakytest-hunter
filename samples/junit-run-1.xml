@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ci" tests="5" failures="0" time="12.4">
+  <testcase classname="api" name="GET /users returns 200" time="0.42"/>
+  <testcase classname="api" name="POST /users persists" time="1.1"/>
+  <testcase classname="db" name="unique email constraint holds" time="0.55"/>
+  <testcase classname="ui" name="dashboard renders chart" time="0.9"/>
+  <testcase classname="util" name="slugify lowercases" time="0.01"/>
+</testsuite>
