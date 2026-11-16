@@ -1,0 +1,170 @@
+{
+  "name": "flakytest-hunter",
+  "displayName": "FlakyTest Hunter",
+  "description": "Hunt down flaky tests: import CI JUnit reports, track pass/fail history over time, score instability, detect root causes (timing, order, network, shared data) and suggest fixes.",
+  "version": "1.0.0",
+  "publisher": "fth",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Testing",
+    "Other"
+  ],
+  "keywords": [
+    "flaky",
+    "tests",
+    "ci",
+    "junit",
+    "instability",
+    "test analysis"
+  ],
+  "icon": "icons/icon-128.png",
+  "galleryBanner": {
+    "color": "#190f23",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fth/flakytest-hunter"
+  },
+  "bugs": {
+    "url": "https://github.com/fth/flakytest-hunter/issues"
+  },
+  "homepage": "https://github.com/fth/flakytest-hunter#readme",
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "flakyTestHunter",
+          "title": "FlakyTest Hunter",
+          "icon": "media/target.svg"
+        }
+      ]
+    },
+    "views": {
+      "flakyTestHunter": [
+        {
+          "id": "fth.flaky",
+          "name": "Flaky Tests"
+        },
+        {
+          "id": "fth.stats",
+          "name": "Stats"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "fth.flaky",
+        "contents": "No data yet.\n[Scan Workspace for Test Reports](command:flakytest.scanWorkspace)\n[Import CI Artifacts](command:flakytest.importArtifacts)"
+      }
+    ],
+    "commands": [
+      {
+        "command": "flakytest.scanWorkspace",
+        "title": "Scan Workspace for Test Reports",
+        "category": "FlakyTest Hunter",
+        "icon": "media/target.svg"
+      },
+      {
+        "command": "flakytest.importArtifacts",
+        "title": "Import CI Artifacts (Folder of JUnit XML)",
+        "category": "FlakyTest Hunter",
+        "icon": "media/target.svg"
+      },
+      {
+        "command": "flakytest.showDashboard",
+        "title": "Open Flakiness Dashboard",
+        "category": "FlakyTest Hunter"
+      },
+      {
+        "command": "flakytest.exportReport",
+        "title": "Export Flakiness Report (Markdown)",
+        "category": "FlakyTest Hunter"
+      },
+      {
+        "command": "flakytest.clearHistory",
+        "title": "Clear Collected History",
+        "category": "FlakyTest Hunter"
+      },
+      {
+        "command": "fth.revealTest",
+        "title": "Reveal Flaky Test"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "flakytest.scanWorkspace",
+          "when": "view == fth.flaky",
+          "group": "navigation@1"
+        },
+        {
+          "command": "flakytest.importArtifacts",
+          "when": "view == fth.flaky",
+          "group": "navigation@2"
+        },
+        {
+          "command": "flakytest.showDashboard",
+          "when": "view == fth.flaky",
+          "group": "navigation@3"
+        }
+      ],
+      "commandPalette": []
+    },
+    "configuration": {
+      "title": "FlakyTest Hunter",
+      "properties": {
+        "flakyTestHunter.reportGlob": {
+          "type": "string",
+          "default": "**/{junit,TEST-*,*junit*,*results*}.{xml,json}",
+          "description": "Glob for test report files when scanning the workspace."
+        },
+        "flakyTestHunter.minRuns": {
+          "type": "number",
+          "default": 3,
+          "minimum": 2,
+          "description": "Minimum recorded runs before a test can be flagged flaky."
+        },
+        "flakyTestHunter.flakyThreshold": {
+          "type": "number",
+          "default": 25,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Instability score at/above which a test is flagged."
+        },
+        "flakyTestHunter.historyLimit": {
+          "type": "number",
+          "default": 500,
+          "description": "Max run records kept per test."
+        },
+        "flakyTestHunter.windowDays": {
+          "type": "number",
+          "default": 30,
+          "description": "Only runs newer than this many days count toward flakiness."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package --out flakytest-hunter.vsix",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.24.0",
+    "typescript": "^5.3.3",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0"
+  }
+}
