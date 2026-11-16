@@ -3,7 +3,7 @@
   "displayName": "FlakyTest Hunter",
   "description": "Hunt down flaky tests: import CI JUnit reports, track pass/fail history over time, score instability, detect root causes (timing, order, network, shared data) and suggest fixes.",
   "version": "1.0.0",
-  "publisher": "fth",
+  "publisher": "RadwanAlmsora",
   "license": "MIT",
   "engines": {
     "vscode": "^1.85.0"
@@ -27,12 +27,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fth/flakytest-hunter"
+    "url": "https://github.com/radwanalmsora/flakytest-hunter"
   },
   "bugs": {
-    "url": "https://github.com/fth/flakytest-hunter/issues"
+    "url": "https://github.com/radwanalmsora/flakytest-hunter/issues"
   },
-  "homepage": "https://github.com/fth/flakytest-hunter#readme",
+  "homepage": "https://github.com/radwanalmsora/flakytest-hunter#readme",
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
