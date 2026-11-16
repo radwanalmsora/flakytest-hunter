@@ -67,7 +67,7 @@ async function refreshUI(): Promise<void> {
 
 async function scanFiles(uris: vscode.Uri[], sourceLabel: string): Promise<void> {
   if (!uris.length) { vscode.window.showInformationMessage("FlakyTest Hunter: no report files found."); return; }
-  let totalRecords = 0, totalCases = 0;
+  let totalCases = 0;
   // one timestamp per file keeps re-imports idempotent-ish; CI imports use the file's mtime when newer
   for (const uri of uris) {
     let text: string;
